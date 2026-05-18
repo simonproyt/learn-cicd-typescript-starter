@@ -34,3 +34,7 @@ jobs:
         continue-on-error: true
         run: |
           gcloud builds submit --tag "${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:${{ secrets.GCP_TAG }}" .
+      - name: Db migrations
+        continue-on-error: true
+        run: |
+          npm run db:migrate
