@@ -23,3 +23,14 @@ jobs:
 
       - name: Build app
         run: npm run build
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+          project_id: ${{ secrets.GCP_PROJECT }}
+
+      - name: Build and push Docker image to Artifact Registry
+        continue-on-error: true
+        run: |
+          gcloud builds submit --tag "${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_REPOSITORY }}/${{ secrets.GCP_IMAGE }}:${{ secrets.GCP_TAG }}" .
